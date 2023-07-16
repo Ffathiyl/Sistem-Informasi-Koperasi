@@ -42,4 +42,11 @@ public class Transaksi {
     public void setHargaTotal(double hargaTotal) {
         this.hargaTotal = hargaTotal;
     }
+
+    @Override
+    public String toString() {
+        return pelanggan + "\t\t\t" +
+                obat.getNamaObat() + "\t\t\t" + jumlah + "\t\t\t" +
+                hargaTotal;
+    }
 }

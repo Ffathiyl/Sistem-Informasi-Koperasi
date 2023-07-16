@@ -12,7 +12,7 @@ public class QueueTransaksi {
     }
 
     public void enqueue (NodeTransaksi newElements){
-        System.out.println("enqueu : " + newElements.getTransaksi());
+        System.out.println("enqueu : " + newElements.getTransaksi().getObat());
         transaksi.addLast(newElements);
         size++;
     }

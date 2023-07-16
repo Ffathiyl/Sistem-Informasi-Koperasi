@@ -6,7 +6,9 @@ public class Main {
     static Scanner input = new Scanner(System.in);
     static SLinkedListObat SLObat = new SLinkedListObat();
     static List<Transaksi> transaksiList = new ArrayList<>();
+    static QueueTransaksi Transaksi = new QueueTransaksi();
     static Main main = new Main();
+
     public static void main(String[] args) {
         main.Menu();
     }
@@ -28,8 +30,8 @@ public class Main {
 
             switch (choice) {
                 case 1 -> crudObat();
-                case 2 -> transaksi();
-                case 3 -> viewDataTransaksi();
+                case 2 -> Transaksi();
+                case 3 -> Transaksi.display();
                 case 4 -> running = false;
                 default -> System.out.println("Pilihan tidak valid");
             }
@@ -130,60 +132,39 @@ public class Main {
     }
 
     public static void Transaksi(){
+        input.nextLine();
         SLObat.display();
         System.out.print("Nama Pelanggan : ");
         String namaPelanggan = input.nextLine();
-    }
-    public static void transaksi() {
-        input.nextLine();
-        SLObat.display();
 
-        System.out.print("Masukkan nama pelanggan: ");
-        String namaPelanggan = input.nextLine();
-
-        System.out.print("Masukkan ID obat yang akan dibeli: ");
+        System.out.println("Masukkan ID obat yang akan dibeli");
         int idObat = input.nextInt();
         input.nextLine();
 
         NodeObat nodeObat = SLObat.searchID(idObat);
-        if (nodeObat != null) {
+        if (nodeObat != null){
             Obat obat = nodeObat.getObat();
-            System.out.print("Masukkan jumlah yang akan dibeli: ");
+            System.out.println("Jumlah yang akan dibeli");
             int jumlah = input.nextInt();
             input.nextLine();
 
-            if (obat.getStock() >= jumlah) {
+            if (obat.getStock() >= jumlah){
                 obat.setStock(obat.getStock() - jumlah);
 
-                double hargaTotal = obat.getHarga() * jumlah;
-                Transaksi transaksi = new Transaksi(namaPelanggan, obat, jumlah, hargaTotal);
-                transaksiList.add(transaksi);
-
+                double hargatotal = obat.getHarga() * jumlah;
+                Transaksi transaksi = new Transaksi(namaPelanggan, obat, jumlah, hargatotal);
+                NodeTransaksi nodeTransaksi = new NodeTransaksi(transaksi);
+                Transaksi.enqueue(nodeTransaksi);
                 System.out.println("Transaksi berhasil!");
                 System.out.println("Pelanggan: " + namaPelanggan);
                 System.out.println("Obat: " + obat.getNamaObat());
                 System.out.println("Jumlah yang dibeli: " + jumlah);
-                System.out.println("Harga total: " + hargaTotal);
+                System.out.println("Harga total: " + hargatotal);
             } else {
-                System.out.println("Stok obat tidak mencukupi");
+                System.out.println("Stock tidak mencukupi");
             }
         } else {
-            System.out.println("Obat tidak ditemukan");
-        }
-    }
-
-    public static void viewDataTransaksi() {
-        System.out.println("Data Transaksi:");
-        if (transaksiList.isEmpty()) {
-            System.out.println("Tidak ada transaksi yang dilakukan");
-        } else {
-            for (Transaksi transaksi : transaksiList) {
-                System.out.println("Pelanggan: " + transaksi.getPelanggan());
-                System.out.println("Obat: " + transaksi.getObat().getNamaObat());
-                System.out.println("Jumlah yang dibeli: " + transaksi.getJumlah());
-                System.out.println("Harga total: " + transaksi.getHargaTotal());
-                System.out.println("-------------------------------------");
-            }
+            System.out.println("Obat tidak ditemukan!");
         }
     }
 }
