@@ -62,12 +62,4 @@ public class Obat {
                 merkObat + "\t\t\t" + harga + "\t\t\t" +
                 stock;
     }
-
-    public void kurangiStok(int jumlah) {
-        if (stock >= jumlah) {
-            stock -= jumlah;
-        } else {
-            System.out.println("Stok tidak mencukupi");
-        }
-    }
 }

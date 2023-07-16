@@ -13,11 +13,7 @@ public class SLinkedListObat {
     }
 
     public boolean isEmpty(){
-        if((this.head==null) && (this.tail==null)){
-            return true;
-        } else {
-            return false;
-        }
+        return this.size==0;
     }
 
     public void addFirst(NodeObat nodeObat){
@@ -51,6 +47,10 @@ public class SLinkedListObat {
 
     public void display(){
         NodeObat pointer;
+        if (isEmpty()){
+            System.out.println("List masih kosong");
+            return;
+        }
 
         pointer = head;
 
@@ -80,6 +80,7 @@ public class SLinkedListObat {
         pointer = head;
         head = pointer.getNextReference();
         pointer = null;
+        size--;
     }
 
     public void deletetail(){
@@ -93,10 +94,10 @@ public class SLinkedListObat {
         size--;
     }
 
-    public void insertTengah(NodeObat nodebaru, String insertAfter){
+    public void insertTengah(NodeObat nodebaru, NodeObat insertAfter){
         NodeObat pointer = head;
         while(pointer.getNextReference() != null){
-            if(pointer.getObat().equals(insertAfter)){
+            if(pointer == insertAfter){
                 nodebaru.setNextReference(pointer.getNextReference());
                 pointer.setNextReference(nodebaru);
                 break;

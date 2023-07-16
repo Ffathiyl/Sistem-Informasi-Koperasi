@@ -1,16 +1,12 @@
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     static Scanner input = new Scanner(System.in);
     static SLinkedListObat SLObat = new SLinkedListObat();
-    static List<Transaksi> transaksiList = new ArrayList<>();
     static QueueTransaksi Transaksi = new QueueTransaksi();
-    static Main main = new Main();
 
     public static void main(String[] args) {
-        main.Menu();
+        Menu();
     }
 
     public static void Menu(){
@@ -26,14 +22,19 @@ public class Main {
             System.out.println("3. View Transaksi");
             System.out.println("4. Exit");
             System.out.print("Pilihan: ");
-            int choice = input.nextInt();
 
-            switch (choice) {
-                case 1 -> crudObat();
-                case 2 -> Transaksi();
-                case 3 -> Transaksi.display();
-                case 4 -> running = false;
-                default -> System.out.println("Pilihan tidak valid");
+            if (input.hasNextInt()) {
+                int choice = input.nextInt();
+                switch (choice) {
+                    case 1 -> crudObat();
+                    case 2 -> Transaksi();
+                    case 3 -> Transaksi.display();
+                    case 4 -> running = false;
+                    default -> System.out.println("Pilihan tidak valid");
+                }
+            } else {
+                System.out.println("Inputan tidak valid!\nHanya Integer");
+                input.nextLine();
             }
         }
     }
@@ -48,14 +49,23 @@ public class Main {
         System.out.println("4. Delete Obat");
         System.out.println("5. Kembali");
         System.out.print("Pilih : ");
-        int choice = input.nextInt();
-        switch (choice){
-            case 1 : inputObat(); break;
-            case 2 : SLObat.display(); crudObat(); break;
-            case 3 : UpdateObat(); break;
-            case 4 : System.out.println("Delete Obat"); break;
-            case 5 : Menu(); break;
-            default : System.out.println("Pilihan tidak tepat!");
+        if (input.hasNextInt()) {
+            int choice = input.nextInt();
+            switch (choice) {
+                case 1 -> inputObat();
+                case 2 -> {
+                    SLObat.display();
+                    crudObat();
+                }
+                case 3 -> UpdateObat();
+                case 4 -> System.out.println("Delete Obat");
+                case 5 -> Menu();
+                default -> System.out.println("Pilihan tidak tepat!");
+            }
+        } else {
+            System.out.println("Inputan tidak valid!\nHanya Integer");
+            input.nextLine();
+            crudObat();
         }
     }
 
@@ -76,13 +86,19 @@ public class Main {
         System.out.println("1. AddFirst");
         System.out.println("2. AddLast");
         System.out.print("Pilih : ");
-        int choose = input.nextInt();
-        input.nextLine();
-        switch (choose) {
-            case 1 -> SLObat.addFirst(nodeObat);
-            case 2 -> SLObat.addLast(nodeObat);
+        if (input.hasNextInt()) {
+            int choose = input.nextInt();
+            input.nextLine();
+            switch (choose) {
+                case 1 -> SLObat.addFirst(nodeObat);
+                case 2 -> SLObat.addLast(nodeObat);
+            }
+            crudObat();
+        } else {
+            System.out.println("Inputan tidak valid!\nHanya Integer");
+            input.nextLine();
+            crudObat();
         }
-        crudObat();
     }
 
     public static void UpdateObat(){
@@ -118,17 +134,7 @@ public class Main {
         } else {
             System.out.println("Obat dengan ID " + idObat + " tidak ditemukan.");
         }
-    }
-
-    public static void searchObatByID() {
-        System.out.print("ID Obat yang dicari : ");
-        int idObat = input.nextInt();
-        input.nextLine();
-
-        NodeObat nodeObat = SLObat.searchID(idObat);
-        if (nodeObat != null) {
-            System.out.println(nodeObat.getObat());
-        }
+        crudObat();
     }
 
     public static void Transaksi(){
@@ -138,33 +144,42 @@ public class Main {
         String namaPelanggan = input.nextLine();
 
         System.out.println("Masukkan ID obat yang akan dibeli");
-        int idObat = input.nextInt();
-        input.nextLine();
-
-        NodeObat nodeObat = SLObat.searchID(idObat);
-        if (nodeObat != null){
-            Obat obat = nodeObat.getObat();
-            System.out.println("Jumlah yang akan dibeli");
-            int jumlah = input.nextInt();
+        if (input.hasNextInt()) {
+            int idObat = input.nextInt();
             input.nextLine();
 
-            if (obat.getStock() >= jumlah){
-                obat.setStock(obat.getStock() - jumlah);
+            NodeObat nodeObat = SLObat.searchID(idObat);
+            if (nodeObat != null) {
+                Obat obat = nodeObat.getObat();
+                System.out.println("Jumlah yang akan dibeli");
+                int jumlah = input.nextInt();
+                if (jumlah > 0) {
+                    input.nextLine();
 
-                double hargatotal = obat.getHarga() * jumlah;
-                Transaksi transaksi = new Transaksi(namaPelanggan, obat, jumlah, hargatotal);
-                NodeTransaksi nodeTransaksi = new NodeTransaksi(transaksi);
-                Transaksi.enqueue(nodeTransaksi);
-                System.out.println("Transaksi berhasil!");
-                System.out.println("Pelanggan: " + namaPelanggan);
-                System.out.println("Obat: " + obat.getNamaObat());
-                System.out.println("Jumlah yang dibeli: " + jumlah);
-                System.out.println("Harga total: " + hargatotal);
+                    if (obat.getStock() >= jumlah) {
+                        obat.setStock(obat.getStock() - jumlah);
+
+                        double hargatotal = obat.getHarga() * jumlah;
+                        Transaksi transaksi = new Transaksi(namaPelanggan, obat, jumlah, hargatotal);
+                        NodeTransaksi nodeTransaksi = new NodeTransaksi(transaksi);
+                        Transaksi.enqueue(nodeTransaksi);
+                        System.out.println("Transaksi berhasil!");
+                        System.out.println("Pelanggan: " + namaPelanggan);
+                        System.out.println("Obat: " + obat.getNamaObat());
+                        System.out.println("Jumlah yang dibeli: " + jumlah);
+                        System.out.println("Harga total: " + hargatotal);
+                    } else {
+                        System.out.println("Stock tidak mencukupi");
+                    }
+                } else {
+                    System.out.println("Harus lebih besar dari 0");
+                }
             } else {
-                System.out.println("Stock tidak mencukupi");
+                System.out.println("Obat tidak ditemukan!");
             }
         } else {
-            System.out.println("Obat tidak ditemukan!");
+            System.out.println("Inputan tidak valid!\nHanya Integer");
+            input.nextLine();
         }
     }
 }

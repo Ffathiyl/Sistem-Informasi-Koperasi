@@ -12,11 +12,7 @@ public class SLinkedListTransaksi {
     }
 
     public boolean isEmpty(){
-        if((this.head==null) && (this.tail==null)){
-            return true;
-        } else {
-            return false;
-        }
+        return this.size==0;
     }
 
     public void addFirst(NodeTransaksi nodeTransaksi){
@@ -50,6 +46,10 @@ public class SLinkedListTransaksi {
 
     public void display(){
         NodeTransaksi pointer;
+        if (isEmpty()){
+            System.out.println("Antrian Kosong!");
+            return;
+        }
 
         pointer = head;
 
@@ -67,6 +67,7 @@ public class SLinkedListTransaksi {
         pointer = head;
         head = pointer.getNextReference();
         pointer = null;
+        size--;
     }
 
     public void deletetail(){
